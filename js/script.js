@@ -1,29 +1,19 @@
-// --- CONFIG PWA ---
-const manifest = {
-    "name": "MentalEnergy",
-    "short_name": "MentalEnergy",
-    "start_url": ".",
-    "display": "standalone",
-    "background_color": "#050505",
-    "theme_color": "#050505"
-};
-const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-document.querySelector('#manifest-link').setAttribute('href', URL.createObjectURL(blob));
-
-lucide.createIcons();
-
-function toggleSettings() {
-    document.getElementById('config-modal').classList.toggle('open');
-}
-
 let mic, fft;
 let mode = "NEUTRAL";
 let particles = [];
 let smoothedCentroid = 0;
 let appStarted = false;
 
+// Inicialización de iconos Lucide
+lucide.createIcons();
+
+function toggleSettings() {
+    document.getElementById('config-modal').classList.toggle('open');
+}
+
 function startApp() {
     if (appStarted) return;
+    // p5.js función para habilitar audio en móviles
     userStartAudio().then(() => {
         appStarted = true;
         document.getElementById('splash-screen').style.opacity = '0';
@@ -74,6 +64,7 @@ function draw() {
     fft.analyze();
     let centroid = fft.getCentroid();
 
+    // Lógica Automática (opcional)
     if (document.getElementById('auto-mode').checked && vol > 0.02) {
         smoothedCentroid = lerp(smoothedCentroid, centroid, 0.1);
         mode = (smoothedCentroid > 2400 || vol > 0.35) ? "LIE" : "TRUTH";
@@ -98,7 +89,7 @@ function draw() {
     st.innerText = targetText;
     st.style.color = targetColor.toString();
 
-    // Aura
+    // Dibujado del Aura
     noFill();
     stroke(targetColor);
     strokeWeight(mode === "NEUTRAL" ? 1 : 2.5);
@@ -112,6 +103,7 @@ function draw() {
     }
     endShape(CLOSE);
 
+    // Partículas
     if (vol > 0.01) particles.push(new Particle(targetColor));
     for (let i = particles.length - 1; i >= 0; i--) {
         particles[i].update(mode === "LIE");
