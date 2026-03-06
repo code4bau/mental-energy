@@ -21,6 +21,12 @@
 
 <body>
 
+    <!-- Pantalla de Activación -->
+    <div id="splash-screen" onclick="startApp()">
+        <div class="orb"></div>
+        <p>Toca para sincronizar esencia</p>
+    </div>
+
     <div id="settings-trigger" onclick="toggleSettings()">
         <i data-lucide="eye" color="#d4af37" size="24"></i>
     </div>
@@ -29,12 +35,10 @@
         <div class="config-box">
             <h3>MentalEnergy</h3>
             <input type="text" id="forced-value" placeholder="Revelación Secreta" value="As de Picas">
-
-            <div class="toggle-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                 <span>Detección Autónoma</span>
-                <input type="checkbox" id="auto-mode" style="width: 20px; height: 20px; accent-color: #d4af37;">
+                <input type="checkbox" id="auto-mode" style="width: 20px; height: 20px;">
             </div>
-
             <button class="btn-save" onclick="toggleSettings()">Vincular Alma</button>
         </div>
     </div>
@@ -42,19 +46,18 @@
     <div id="ui-layer">
         <div class="header-container">
             <div class="app-logo">
-                <img id="logo-img" src="" alt="Logo">
-                <i id="logo-icon" data-lucide="zap" color="#d4af37" size="28"></i>
+                <i data-lucide="zap" color="#d4af37" size="28"></i>
             </div>
             <div class="header-text">MentalEnergy</div>
         </div>
-        <div class="status" id="status-text">Escuchando el silencio...</div>
+        <div class="status" id="status-text">Iniciando...</div>
     </div>
 
     <div id="controls">
         <div class="zone" id="truth-zone"></div>
         <div class="zone" id="lie-zone"></div>
-    </div>
-    <script src="script.js"></script>
+
+        <script src="js/script.js"></script>
 </body>
 
 </html>

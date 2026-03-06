@@ -1,12 +1,61 @@
+    :root {
+        --gold: #d4af37;
+        --bg: #050505;
+    }
+
     body {
         margin: 0;
         padding: 0;
-        background-color: #050505;
-        color: #d4af37;
+        background-color: var(--bg);
+        color: var(--gold);
         font-family: 'Segoe UI', serif;
         overflow: hidden;
         user-select: none;
         touch-action: none;
+    }
+
+    /* Pantalla de Inicio / Activación */
+    #splash-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--bg);
+        z-index: 3000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: opacity 0.8s ease;
+    }
+
+    #splash-screen .orb {
+        width: 80px;
+        height: 80px;
+        border: 2px solid var(--gold);
+        border-radius: 50%;
+        margin-bottom: 20px;
+        box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 0.5;
+        }
     }
 
     #ui-layer {
@@ -31,7 +80,6 @@
         gap: 15px;
     }
 
-    /* Contenedor del Logo */
     .app-logo {
         width: 50px;
         height: 50px;
@@ -43,14 +91,6 @@
         align-items: center;
         overflow: hidden;
         box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
-    }
-
-    .app-logo img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: none;
-        /* Se activa por JS */
     }
 
     .header-text {
@@ -66,7 +106,6 @@
         font-style: italic;
         font-size: 20px;
         letter-spacing: 2px;
-        transition: all 0.5s ease;
         text-align: center;
         padding: 0 20px;
         max-width: 85%;
@@ -80,7 +119,6 @@
         z-index: 100;
         opacity: 0.2;
         pointer-events: auto;
-        cursor: pointer;
     }
 
     #config-modal {
@@ -106,18 +144,10 @@
         background: #0a0a0a;
         padding: 35px;
         border-radius: 25px;
-        border: 1px solid #d4af37;
+        border: 1px solid var(--gold);
         width: 85%;
         max-width: 320px;
         text-align: center;
-    }
-
-    .config-box h3 {
-        margin-bottom: 25px;
-        color: #d4af37;
-        font-weight: 300;
-        letter-spacing: 3px;
-        text-transform: uppercase;
     }
 
     .config-box input[type="text"] {
@@ -133,26 +163,15 @@
         margin-bottom: 30px;
     }
 
-    .toggle-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-        color: #d4af37;
-        font-size: 14px;
-    }
-
     .btn-save {
-        background: #d4af37;
+        background: var(--gold);
         color: black;
         border: none;
         padding: 15px;
         border-radius: 50px;
         font-weight: bold;
-        cursor: pointer;
         width: 100%;
         text-transform: uppercase;
-        letter-spacing: 1px;
     }
 
     #controls {
@@ -168,4 +187,13 @@
     .zone {
         flex: 1;
         height: 100%;
+        pointer-events: auto;
+    }
+
+    canvas {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1;
     }

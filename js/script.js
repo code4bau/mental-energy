@@ -1,17 +1,4 @@
-// --- CONFIGURACIÓN DEL LOGO ---
-// Pon aquí la ruta de tu imagen, ej: "assets/logo_mental.png"
-const MI_LOGO_URL = "";
-
-if (MI_LOGO_URL !== "") {
-    const imgEl = document.getElementById('logo-img');
-    imgEl.src = MI_LOGO_URL;
-    imgEl.onload = () => {
-        imgEl.style.display = 'block';
-        document.getElementById('logo-icon').style.display = 'none';
-    };
-}
-
-// --- CONFIGURACIÓN PWA ---
+// --- CONFIG PWA ---
 const manifest = {
     "name": "MentalEnergy",
     "short_name": "MentalEnergy",
@@ -23,54 +10,48 @@ const manifest = {
 const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
 document.querySelector('#manifest-link').setAttribute('href', URL.createObjectURL(blob));
 
-// Registro de Service Worker para habilitar instalación
-if ('serviceWorker' in navigator) {
-    const swCode = `self.addEventListener('fetch', function(event) {});`;
-    const swBlob = new Blob([swCode], { type: 'application/javascript' });
-    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => { });
-}
-
 lucide.createIcons();
 
 function toggleSettings() {
-    const modal = document.getElementById('config-modal');
-    modal.classList.toggle('open');
+    document.getElementById('config-modal').classList.toggle('open');
 }
 
-// --- LÓGICA DE VISUALIZACIÓN (p5.js) ---
 let mic, fft;
 let mode = "NEUTRAL";
-let statusText;
 let particles = [];
-let forcedInput;
-let autoModeCheckbox;
-
 let smoothedCentroid = 0;
-let stressThreshold = 2400;
+let appStarted = false;
+
+function startApp() {
+    if (appStarted) return;
+    userStartAudio().then(() => {
+        appStarted = true;
+        document.getElementById('splash-screen').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('splash-screen').style.display = 'none';
+        }, 800);
+    });
+}
 
 function setup() {
-    const canvas = createCanvas(windowWidth, windowHeight);
-    canvas.parent(document.body);
+    let cnv = createCanvas(windowWidth, windowHeight);
+    cnv.style('display', 'block');
 
     mic = new p5.AudioIn();
     mic.start();
     fft = new p5.FFT(0.8, 1024);
     fft.setInput(mic);
 
-    statusText = document.getElementById('status-text');
-    forcedInput = document.getElementById('forced-value');
-    autoModeCheckbox = document.getElementById('auto-mode');
-
     const setupZone = (id, targetMode) => {
         const el = document.getElementById(id);
         const start = (e) => {
-            if (!autoModeCheckbox.checked) {
+            if (!document.getElementById('auto-mode').checked) {
                 e.preventDefault();
                 mode = targetMode;
             }
         };
         const end = (e) => {
-            if (!autoModeCheckbox.checked) {
+            if (!document.getElementById('auto-mode').checked) {
                 e.preventDefault();
                 mode = "NEUTRAL";
             }
@@ -87,47 +68,37 @@ function setup() {
 
 function draw() {
     background(5, 5, 5, 45);
+    if (!appStarted) return;
 
     let vol = mic.getLevel();
     fft.analyze();
     let centroid = fft.getCentroid();
 
-    if (autoModeCheckbox.checked && vol > 0.02) {
+    if (document.getElementById('auto-mode').checked && vol > 0.02) {
         smoothedCentroid = lerp(smoothedCentroid, centroid, 0.1);
-        if (smoothedCentroid > stressThreshold || vol > 0.35) {
-            mode = "LIE";
-        } else {
-            mode = "TRUTH";
-        }
-    } else if (autoModeCheckbox.checked) {
+        mode = (smoothedCentroid > 2400 || vol > 0.35) ? "LIE" : "TRUTH";
+    } else if (document.getElementById('auto-mode').checked) {
         mode = "NEUTRAL";
-        smoothedCentroid = lerp(smoothedCentroid, 1000, 0.05);
     }
 
     translate(width / 2, height / 2);
 
-    let targetColor;
-    let targetText;
-    let intensity = map(vol, 0, 0.4, 40, 350);
+    let targetColor = color(212, 175, 55, 120);
+    let targetText = vol > 0.01 ? "Analizando energía..." : "Escuchando el silencio...";
 
     if (mode === "TRUTH") {
         targetColor = color(150, 255, 200, 180);
-        targetText = "Sincronía detectada: " + forcedInput.value;
-        intensity *= 0.7;
+        targetText = "Sincronía: " + document.getElementById('forced-value').value;
     } else if (mode === "LIE") {
         targetColor = color(255, 100, 50, 200);
-        targetText = "Disonancia en la esencia";
-        intensity *= 3.5;
-    } else {
-        targetColor = color(212, 175, 55, 120);
-        targetText = vol > 0.01 ? "Analizando energía..." : "Escuchando el silencio...";
+        targetText = "Disonancia detectada";
     }
 
-    statusText.innerText = targetText;
-    statusText.style.color = targetColor.toString();
-    statusText.style.textShadow = mode !== "NEUTRAL" ? `0 0 15px ${targetColor.toString()}` : "none";
+    const st = document.getElementById('status-text');
+    st.innerText = targetText;
+    st.style.color = targetColor.toString();
 
-    // Aura de Energía
+    // Aura
     noFill();
     stroke(targetColor);
     strokeWeight(mode === "NEUTRAL" ? 1 : 2.5);
@@ -135,29 +106,13 @@ function draw() {
     beginShape();
     for (let i = 0; i < 360; i += 3) {
         let angle = radians(i);
-        let noiseFactor = mode === "LIE" ? 0.3 : 0.05;
-        let noiseVal = noise(i * noiseFactor, frameCount * 0.02);
-        let offset = map(noiseVal, 0, 1, -25, 25);
-
-        if (mode === "LIE") {
-            offset += random(-intensity * 0.6, intensity * 0.6);
-        }
-
-        let r = 140 + offset + (vol * intensity);
-        let x = r * cos(angle);
-        let y = r * sin(angle);
-
-        if (i % 30 === 0) {
-            fill(targetColor);
-            ellipse(x, y, mode === "NEUTRAL" ? 2 : 5);
-            noFill();
-        }
-        vertex(x, y);
+        let noiseVal = noise(i * (mode === "LIE" ? 0.3 : 0.05), frameCount * 0.02);
+        let r = 140 + map(noiseVal, 0, 1, -25, 25) + (vol * (mode === "LIE" ? 350 : 150));
+        vertex(r * cos(angle), r * sin(angle));
     }
     endShape(CLOSE);
 
     if (vol > 0.01) particles.push(new Particle(targetColor));
-
     for (let i = particles.length - 1; i >= 0; i--) {
         particles[i].update(mode === "LIE");
         particles[i].display();
