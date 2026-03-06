@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MentalEnergy</title>
+
+    <!-- PWA Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="MentalEnergy">
+    <link rel="manifest" id="manifest-link">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div id="settings-trigger" onclick="toggleSettings()">
+        <i data-lucide="eye" color="#d4af37" size="24"></i>
+    </div>
+
+    <div id="config-modal">
+        <div class="config-box">
+            <h3>MentalEnergy</h3>
+            <input type="text" id="forced-value" placeholder="Revelación Secreta" value="As de Picas">
+
+            <div class="toggle-container">
+                <span>Detección Autónoma</span>
+                <input type="checkbox" id="auto-mode" style="width: 20px; height: 20px; accent-color: #d4af37;">
+            </div>
+
+            <button class="btn-save" onclick="toggleSettings()">Vincular Alma</button>
+        </div>
+    </div>
+
+    <div id="ui-layer">
+        <div class="header-container">
+            <div class="app-logo">
+                <img id="logo-img" src="" alt="Logo">
+                <i id="logo-icon" data-lucide="zap" color="#d4af37" size="28"></i>
+            </div>
+            <div class="header-text">MentalEnergy</div>
+        </div>
+        <div class="status" id="status-text">Escuchando el silencio...</div>
+    </div>
+
+    <div id="controls">
+        <div class="zone" id="truth-zone"></div>
+        <div class="zone" id="lie-zone"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>

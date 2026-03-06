@@ -1,0 +1,171 @@
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #050505;
+        color: #d4af37;
+        font-family: 'Segoe UI', serif;
+        overflow: hidden;
+        user-select: none;
+        touch-action: none;
+    }
+
+    #ui-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    .header-container {
+        margin-top: 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    /* Contenedor del Logo */
+    .app-logo {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #1a1a1a, #000);
+        border-radius: 14px;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+    }
+
+    .app-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+        /* Se activa por JS */
+    }
+
+    .header-text {
+        letter-spacing: 5px;
+        opacity: 0.8;
+        text-transform: uppercase;
+        font-size: 16px;
+        font-weight: 300;
+    }
+
+    .status {
+        margin-bottom: 70px;
+        font-style: italic;
+        font-size: 20px;
+        letter-spacing: 2px;
+        transition: all 0.5s ease;
+        text-align: center;
+        padding: 0 20px;
+        max-width: 85%;
+        min-height: 2.5em;
+    }
+
+    #settings-trigger {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        z-index: 100;
+        opacity: 0.2;
+        pointer-events: auto;
+        cursor: pointer;
+    }
+
+    #config-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 200;
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(10px);
+    }
+
+    #config-modal.open {
+        display: flex;
+    }
+
+    .config-box {
+        background: #0a0a0a;
+        padding: 35px;
+        border-radius: 25px;
+        border: 1px solid #d4af37;
+        width: 85%;
+        max-width: 320px;
+        text-align: center;
+    }
+
+    .config-box h3 {
+        margin-bottom: 25px;
+        color: #d4af37;
+        font-weight: 300;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+    .config-box input[type="text"] {
+        width: 100%;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.5);
+        color: white;
+        padding: 12px;
+        font-size: 18px;
+        text-align: center;
+        outline: none;
+        margin-bottom: 30px;
+    }
+
+    .toggle-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        color: #d4af37;
+        font-size: 14px;
+    }
+
+    .btn-save {
+        background: #d4af37;
+        color: black;
+        border: none;
+        padding: 15px;
+        border-radius: 50px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    #controls {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        z-index: 20;
+    }
+
+    .zone {
+        flex: 1;
+        height: 100%;
+    }
