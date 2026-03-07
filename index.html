@@ -11,7 +11,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="MentalEnergy">
-    <link rel="manifest" id="manifest-link">
+    <link rel="manifest" href="manifest.json" id="manifest-link">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
@@ -46,7 +46,7 @@
     <div id="ui-layer">
         <div class="header-container">
             <div class="app-logo">
-                <i data-lucide="zap" color="#d4af37" size="28"></i>
+                <img src="assets/mentalLogo.png" alt="MentalEnergy Logo">
             </div>
             <div class="header-text">MentalEnergy</div>
         </div>
@@ -58,6 +58,15 @@
         <div class="zone" id="lie-zone"></div>
 
         <script src="js/script.js"></script>
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('./sw.js')
+                        .then(reg => console.log('Service Worker registrado', reg))
+                        .catch(err => console.error('Error al registrar Service Worker', err));
+                });
+            }
+        </script>
 </body>
 
 </html>

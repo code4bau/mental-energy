@@ -65,9 +65,11 @@ function draw() {
     let centroid = fft.getCentroid();
 
     // Lógica Automática (opcional)
-    if (document.getElementById('auto-mode').checked && vol > 0.02) {
+    // Lógica Automática Mejorada
+    if (document.getElementById('auto-mode').checked && vol > 0.008) {
         smoothedCentroid = lerp(smoothedCentroid, centroid, 0.1);
-        mode = (smoothedCentroid > 2400 || vol > 0.35) ? "LIE" : "TRUTH";
+        // Ajustamos umbrales: si la voz es aguda o fuerte, es LIE
+        mode = (smoothedCentroid > 2200 || vol > 0.25) ? "LIE" : "TRUTH";
     } else if (document.getElementById('auto-mode').checked) {
         mode = "NEUTRAL";
     }
@@ -75,7 +77,13 @@ function draw() {
     translate(width / 2, height / 2);
 
     let targetColor = color(212, 175, 55, 120);
-    let targetText = vol > 0.01 ? "Analizando energía..." : "Escuchando el silencio...";
+    // Umbral más bajo para detectar voz (0.005 en lugar de 0.01)
+    let targetText = vol > 0.005 ? "Analizando energía..." : "Escuchando el silencio...";
+
+    // Feedback visual de sensibilidad (opcional, para que el mago sepa que el mic funciona)
+    if (vol > 0.005 && mode === "NEUTRAL") {
+        targetColor = color(212, 175, 55, 180 + sin(frameCount * 0.1) * 50);
+    }
 
     if (mode === "TRUTH") {
         targetColor = color(150, 255, 200, 180);
